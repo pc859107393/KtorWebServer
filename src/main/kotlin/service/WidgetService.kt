@@ -3,8 +3,7 @@ package service
 import model.*
 import org.jetbrains.exposed.sql.*
 import org.joda.time.DateTime
-import service.DatabaseFactory.dbQuery
-import java.util.Date
+import database.DatabaseFactory.dbQuery
 
 class WidgetService {
 
@@ -29,8 +28,7 @@ class WidgetService {
     suspend fun getWidget(id: Int): Widget? = dbQuery {
         Widgets.select {
             (Widgets.id eq id)
-        }.mapNotNull { toWidget(it) }
-                .singleOrNull()
+        }.mapNotNull { toWidget(it) }.singleOrNull()
     }
 
     suspend fun updateWidget(widget: NewWidget): Widget? {

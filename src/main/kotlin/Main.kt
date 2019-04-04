@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.SerializationFeature
+import database.DatabaseFactory
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.install
@@ -13,8 +14,7 @@ import io.ktor.routing.Routing
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.websocket.WebSockets
 import log.logger
-import service.DatabaseFactory
-import service.WidgetService
+import web.admin
 import web.widget
 import java.util.*
 
@@ -28,6 +28,7 @@ fun Application.main() {
 
 @KtorExperimentalAPI
 class Main {
+
     fun Application.main() {
         val config = environment.config
         //初始化环境变量参数
@@ -53,18 +54,19 @@ class Main {
         DatabaseFactory.init(jdbcStr, maximumPoolSize.toInt(), username, password, isAutoCommit.toBoolean())
 
         install(Routing) {
-            widget(WidgetService())
+            widget()
+            admin()
         }
         //通过拦截器打印输出请求元数据
         intercept(ApplicationCallPipeline.Features) {
             val requestId = UUID.randomUUID()
             logger.attach("req.Id", requestId.toString()) {
                 val sb = StringBuilder("cookies={")
-                this.context.request.cookies.rawCookies.forEach {
+                this.context.request.cookies.rawCookies.forEach { it ->
                     sb.append(it.key).append("=").append(it.value).append("&")
                 }
                 sb.append("}\nheaders={")
-                this.context.request.headers.entries().forEach {
+                this.context.request.headers.entries().forEach { it ->
                     sb.append(it.key).append("=").append(it.value).append("&")
                 }
                 sb.append("}")

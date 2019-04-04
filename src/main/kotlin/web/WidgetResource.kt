@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.request.receive
 import io.ktor.response.respond
+import io.ktor.response.respondJson
 import io.ktor.routing.*
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -14,18 +15,20 @@ import model.NewWidget
 import service.WidgetService
 
 @ObsoleteCoroutinesApi
-fun Route.widget(widgetService: WidgetService) {
+fun Route.widget() {
+
+    val widgetService = WidgetService()
 
     route("/widget") {
 
         get("/") {
-            call.respond(widgetService.getAllWidgets())
+            call.respondJson(widgetService.getAllWidgets())
         }
 
         get("/{id}") {
             val widget = widgetService.getWidget(call.parameters["id"]?.toInt()!!)
-            if (widget == null) call.respond(HttpStatusCode.NotFound)
-            else call.respond(widget)
+            if (widget == null) call.respondJson(HttpStatusCode.NotFound)
+            else call.respondJson(widget)
         }
 
         post("/") {
@@ -36,14 +39,14 @@ fun Route.widget(widgetService: WidgetService) {
         put("/") {
             val widget = call.receive<NewWidget>()
             val updated = widgetService.updateWidget(widget)
-            if(updated == null) call.respond(HttpStatusCode.NotFound)
+            if (updated == null) call.respondJson(HttpStatusCode.NotFound)
             else call.respond(HttpStatusCode.OK, updated)
         }
 
         delete("/{id}") {
             val removed = widgetService.deleteWidget(call.parameters["id"]?.toInt()!!)
-            if (removed) call.respond(HttpStatusCode.OK)
-            else call.respond(HttpStatusCode.NotFound)
+            if (removed) call.respondJson(HttpStatusCode.OK)
+            else call.respondJson(HttpStatusCode.NotFound)
         }
 
     }
@@ -57,7 +60,7 @@ fun Route.widget(widgetService: WidgetService) {
             widgetService.addChangeListener(this.hashCode()) {
                 outgoing.send(Frame.Text(mapper.writeValueAsString(it)))
             }
-            while(true) {
+            while (true) {
                 incoming.receiveOrNull() ?: break
             }
         } finally {

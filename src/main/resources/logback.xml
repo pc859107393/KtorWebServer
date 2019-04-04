@@ -3,20 +3,20 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <!-- %.-1level 只显示信息级别的首字母,%-5level 左对齐显示信息级别全称 -->
-            <Pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] --%mdc{client} %msg%n</Pattern>
+            <Pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] --%mdc{client} %msg%n</Pattern>
         </encoder>
     </appender>
     <appender name="TRACE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/[%date{yyyy}]/[%date{MM}]/[%date{dd}]/trace.log</file>
+        <file>${catalina}/%date{yyyy}/[%date{MM}]/[%date{dd}]/trace.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/trace.%d{yyyy-MM-ddssSSS}.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${catalina}/logs/trace.%d{yyyy-MM-dd-HH-mm-ss-SSS}.%i.log.zip</fileNamePattern>
             <maxFileSize>20MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>TRACE</level>
@@ -25,16 +25,16 @@
         </filter>
     </appender>
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/[%date{yyyy}]/[%date{MM}]/[%date{dd}]/info.log</file>
+        <file>${catalina}/%date{yyyy}/[%date{MM}]/[%date{dd}]/info.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/info.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${catalina}/logs/info.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <maxFileSize>20MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
@@ -43,16 +43,16 @@
         </filter>
     </appender>
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/[%date{yyyy}]/[%date{MM}]/[%date{dd}]/debug.log</file>
+        <file>${catalina}/%date{yyyy}/[%date{MM}]/[%date{dd}]/debug.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/debug.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${catalina}/logs/debug.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <maxFileSize>20MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
@@ -61,16 +61,16 @@
         </filter>
     </appender>
     <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/[%date{yyyy}]/[%date{MM}]/[%date{dd}]/warn.log</file>
+        <file>${catalina}/%date{yyyy}/[%date{MM}]/[%date{dd}]/warn.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/warn.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${catalina}/logs/warn.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <maxFileSize>20MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
@@ -79,16 +79,16 @@
         </filter>
     </appender>
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/[%date{yyyy}]/[%date{MM}]/[%date{dd}]/error.log</file>
+        <file>${catalina}/%date{yyyy}/[%date{MM}]/[%date{dd}]/error.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/error.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${catalina}/logs/error.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <maxFileSize>20MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
@@ -97,16 +97,16 @@
         </filter>
     </appender>
     <appender name="ALL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/[%date{yyyy}]/[%date{MM}]/[%date{dd}]/all.log</file>
+        <file>${catalina}/%date{yyyy}/[%date{MM}]/[%date{dd}]/all.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/all.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${catalina}/logs/all.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <maxFileSize>100MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>50GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%logger:%line] --%mdc{client} %msg%n</pattern>
         </encoder>
     </appender>
     <root level="TRACE">
