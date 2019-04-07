@@ -51,7 +51,7 @@ class Main {
             }
         }
         log.info("dataBase -> jdbc：$jdbcStr \t username：$username\t password：$password")
-        DatabaseFactory.init(jdbcStr, maximumPoolSize.toInt(), username, password, isAutoCommit.toBoolean())
+        DatabaseFactory.getInstance(jdbcStr, maximumPoolSize.toInt(), username, password, isAutoCommit.toBoolean())
 
         install(Routing) {
             widget()

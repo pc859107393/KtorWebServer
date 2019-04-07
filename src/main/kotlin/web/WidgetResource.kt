@@ -14,7 +14,6 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import model.NewWidget
 import service.WidgetService
 
-@ObsoleteCoroutinesApi
 fun Route.widget() {
 
     val widgetService = WidgetService()
@@ -51,20 +50,18 @@ fun Route.widget() {
 
     }
 
-    val mapper = jacksonObjectMapper().apply {
-        setSerializationInclusion(JsonInclude.Include.NON_NULL)
-    }
-
-    webSocket("/updates") {
-        try {
-            widgetService.addChangeListener(this.hashCode()) {
-                outgoing.send(Frame.Text(mapper.writeValueAsString(it)))
-            }
-            while (true) {
-                incoming.receiveOrNull() ?: break
-            }
-        } finally {
-            widgetService.removeChangeListener(this.hashCode())
-        }
-    }
+//    val mapper = jacksonObjectMapper().apply {
+//        setSerializationInclusion(JsonInclude.Include.NON_NULL)
+//    }
+//
+//    webSocket("/updates") {
+//        try {
+//            widgetService.addChangeListener(this.hashCode()) {
+//                outgoing.send(Frame.Text(mapper.writeValueAsString(it)))
+//            }
+//            while (true) incoming.receiveOrNull() ?: break
+//        } finally {
+//            widgetService.removeChangeListener(this.hashCode())
+//        }
+//    }
 }

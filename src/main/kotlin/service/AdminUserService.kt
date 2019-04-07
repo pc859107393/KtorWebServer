@@ -1,6 +1,6 @@
 package service
 
-import database.DatabaseFactory.dbQuery
+import database.DatabaseFactory.Companion.dbQuery
 import model.AdminUser
 import model.AdminUserDTO
 import org.jetbrains.exposed.sql.ResultRow

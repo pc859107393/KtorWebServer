@@ -3,7 +3,7 @@ package service
 import model.*
 import org.jetbrains.exposed.sql.*
 import org.joda.time.DateTime
-import database.DatabaseFactory.dbQuery
+import database.DatabaseFactory.Companion.dbQuery
 
 class WidgetService {
 
