@@ -17,12 +17,11 @@ class DatabaseFactory {
 
         @JvmStatic
         fun getInstance(jdbcStr: String, maximumPoolSize: Int, username: String, password: String, autoCommit: Boolean): DatabaseFactory? {
-            if (instance == null)
-                synchronized(DatabaseFactory::class.java) {
-                    if (instance == null)
-                        instance = DatabaseFactory()
+            instance ?: synchronized(DatabaseFactory::class.java) {
+                instance ?: DatabaseFactory().also {
                     init(jdbcStr, maximumPoolSize, username, password, autoCommit)
                 }
+            }
             return instance
         }
 
@@ -63,8 +62,6 @@ class DatabaseFactory {
                 withContext(Dispatchers.IO) {
                     transaction { block() }
                 }
-
-
     }
 
 
