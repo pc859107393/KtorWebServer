@@ -15,7 +15,7 @@ fun Route.admin() {
     route("/admin") {
 
         get("/") {
-            call.respondJson(adminUserService.getAllAdminUsers())
+            call.respondJson(adminUserService.getTenAdmins())
         }
 
         post(path = "/login") {
@@ -26,5 +26,12 @@ fun Route.admin() {
             call.respondJson(emptyList<String>())
         }
 
+        get("/page/{pageNum}") {
+            var pageNum = call.parameters["pageNum"]?.toInt()!!
+            if (pageNum < 1) pageNum = 1
+            call.respondJson(adminUserService.getAdminsByPage(pageNum)
+                    , pageNum
+                    , 20)
+        }
     }
 }

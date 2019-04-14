@@ -1,12 +1,19 @@
 package model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import io.ktor.http.HttpStatusCode
 import java.io.Serializable
 
 class ResponseWrap : Serializable {
     var code: Int = 200
     var msg: String = "OK"
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     var data: Any? = null
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var pageNum: Int? = null
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    var pageSize: Int? = null
+
 
     fun warp(data: Any?): ResponseWrap {
         if (null == data) return notFound()
@@ -15,6 +22,12 @@ class ResponseWrap : Serializable {
         this.code = HttpStatusCode.OK.value
         this.msg = HttpStatusCode.OK.description
         this.data = data
+        return this
+    }
+
+    fun page(pageNum: Int, pageSize: Int): ResponseWrap {
+        this.pageNum = pageNum
+        this.pageSize = pageSize
         return this
     }
 
