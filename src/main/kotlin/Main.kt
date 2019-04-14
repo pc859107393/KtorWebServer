@@ -8,6 +8,8 @@ import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.toLogString
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.http.formUrlEncode
 import io.ktor.jackson.jackson
 import io.ktor.routing.Routing
@@ -56,6 +58,11 @@ class Main {
         install(Routing) {
             widget()
             admin()
+
+            //放置静态资源
+            static("/static") {
+                resources("static")
+            }
         }
         //通过拦截器打印输出请求元数据
         intercept(ApplicationCallPipeline.Features) {
