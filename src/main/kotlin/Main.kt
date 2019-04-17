@@ -8,10 +8,12 @@ import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.toLogString
+import io.ktor.http.Parameters
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.http.formUrlEncode
 import io.ktor.jackson.jackson
+import io.ktor.request.receive
 import io.ktor.routing.Routing
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.websocket.WebSockets
@@ -77,11 +79,23 @@ class Main {
                     sb.append(it.key).append("=").append(it.value).append("&")
                 }
                 sb.append("}")
+
+//                sb.append("}\nparams={")
+//                this.context.receive<Parameters>().entries().forEach {
+//                    sb.append(it.key).append("=").append(it.value).append("&")
+//                }
+//                sb.append("}")
                 logger.info("Interceptor[start]${this.context.request.toLogString()}" +
-                        "\nparams:\t${this.context.parameters.formUrlEncode()} \n$sb")
+                        "\n$sb")
                 proceed()
             }
         }
 
     }
+
+//    companion object {
+//        @JvmStatic
+//        fun main(args: Array<String>) {
+//        }
+//    }
 }
