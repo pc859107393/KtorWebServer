@@ -1,26 +1,19 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import database.DatabaseFactory
-import io.ktor.application.Application
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.install
-import io.ktor.application.log
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
-import io.ktor.features.toLogString
-import io.ktor.http.Parameters
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
-import io.ktor.http.formUrlEncode
 import io.ktor.jackson.jackson
-import io.ktor.request.receive
+import io.ktor.response.respondJson
 import io.ktor.routing.Routing
+import io.ktor.routing.route
 import io.ktor.util.KtorExperimentalAPI
+import io.ktor.util.error
 import io.ktor.websocket.WebSockets
-import log.logger
 import web.admin
 import web.widget
-import java.util.*
 
 @KtorExperimentalAPI
 fun Application.main() {
@@ -32,6 +25,8 @@ fun Application.main() {
 
 @KtorExperimentalAPI
 class Main {
+
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
     fun Application.main() {
         val config = environment.config
@@ -54,6 +49,15 @@ class Main {
                 configure(SerializationFeature.INDENT_OUTPUT, true)
             }
         }
+
+        //全局异常处理
+        install(StatusPages) {
+            exception<Throwable> { cause ->
+                logger.error(cause)
+                call.respondJson(HttpStatusCode(HttpStatusCode.InternalServerError.value, cause.message.toString()))
+            }
+        }
+
         log.info("dataBase -> jdbc：$jdbcStr \t username：$username\t password：$password")
         DatabaseFactory.getInstance(jdbcStr, maximumPoolSize.toInt(), username, password, isAutoCommit.toBoolean())
 
@@ -65,30 +69,34 @@ class Main {
             static("/static") {
                 resources("static")
             }
+
+            //开启404页面提示
+            route("{...}") {
+                handle {
+                    call.respondJson(HttpStatusCode.NotFound)
+                }
+            }
         }
         //通过拦截器打印输出请求元数据
         intercept(ApplicationCallPipeline.Features) {
-            val requestId = UUID.randomUUID()
-            logger.attach("req.Id", requestId.toString()) {
-                val sb = StringBuilder("cookies={")
-                this.context.request.cookies.rawCookies.forEach { it ->
-                    sb.append(it.key).append("=").append(it.value).append("&")
-                }
-                sb.append("}\nheaders={")
-                this.context.request.headers.entries().forEach { it ->
-                    sb.append(it.key).append("=").append(it.value).append("&")
-                }
-                sb.append("}")
+            val sb = StringBuilder("cookies={")
+            this.context.request.cookies.rawCookies.forEach { it ->
+                sb.append(it.key).append("=").append(it.value).append("&")
+            }
+            sb.append("}\nheaders={")
+            this.context.request.headers.entries().forEach { it ->
+                sb.append(it.key).append("=").append(it.value).append("&")
+            }
+            sb.append("}")
 
 //                sb.append("}\nparams={")
 //                this.context.receive<Parameters>().entries().forEach {
 //                    sb.append(it.key).append("=").append(it.value).append("&")
 //                }
 //                sb.append("}")
-                logger.info("Interceptor[start]${this.context.request.toLogString()}" +
-                        "\n$sb")
-                proceed()
-            }
+            logger.info("Interceptor[start]${this.context.request.toLogString()}" +
+                    "\n$sb")
+            proceed()
         }
 
     }

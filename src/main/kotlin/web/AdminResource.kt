@@ -4,7 +4,6 @@ import data.UserLogin
 import io.ktor.application.call
 import io.ktor.http.Parameters
 import io.ktor.request.receive
-import io.ktor.request.receiveParameters
 import io.ktor.response.respondJson
 import io.ktor.routing.Route
 import io.ktor.routing.get
@@ -16,10 +15,18 @@ fun Route.admin() {
 
     val adminUserService = AdminUserService()
 
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+//    val adminUserCache = adminUserCache
+
     route("/admin") {
 
         get("/") {
             call.respondJson(adminUserService.getTenAdmins())
+        }
+
+        get("/exception") {
+            logger.info("全局异常调试！")
+            throw Exception("我是异常信息！")
         }
 
         /**
