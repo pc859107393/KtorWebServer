@@ -12,6 +12,12 @@ suspend inline fun ApplicationCall.respondJson(data: Any) {
 }
 
 @Suppress("NOTHING_TO_INLINE")
+suspend inline fun ApplicationCall.respondJson(data: Any, msg: String) {
+    this.defaultTextContentType(ContentType.Application.Json)
+    response.pipeline.execute(this, ResponseWrap().warp(data, msg))
+}
+
+@Suppress("NOTHING_TO_INLINE")
 suspend inline fun ApplicationCall.respondJson(data: Any, pageNum: Int, pageSize: Int) {
     this.defaultTextContentType(ContentType.Application.Json)
     response.pipeline.execute(this, ResponseWrap().warp(data).page(pageNum, pageSize))
