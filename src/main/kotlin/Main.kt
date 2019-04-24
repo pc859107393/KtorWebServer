@@ -12,8 +12,11 @@ import io.ktor.routing.route
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.error
 import io.ktor.websocket.WebSockets
+import org.valiktor.ConstraintViolationException
+import org.valiktor.i18n.mapToMessage
 import web.admin
 import web.widget
+import java.util.*
 
 @KtorExperimentalAPI
 fun Application.main() {
@@ -52,6 +55,16 @@ class Main {
 
         //全局异常处理
         install(StatusPages) {
+            //数据校验异常捕获输出
+            exception<ConstraintViolationException> { cause ->
+                logger.error(cause)
+                call.respondJson(HttpStatusCode(HttpStatusCode.InternalServerError.value,
+                        cause.constraintViolations.mapToMessage(baseName = "messages", locale = Locale.CHINESE)
+                                .map { "${it.property}: ${it.message}" }
+                                .toString())
+                )
+            }
+
             exception<Throwable> { cause ->
                 logger.error(cause)
                 call.respondJson(HttpStatusCode(HttpStatusCode.InternalServerError.value, cause.message.toString()))

@@ -9,6 +9,8 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
+import org.valiktor.functions.isNotBlank
+import org.valiktor.validate
 import service.AdminUserService
 
 fun Route.admin() {
@@ -16,7 +18,6 @@ fun Route.admin() {
     val adminUserService = AdminUserService()
 
     val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
-//    val adminUserCache = adminUserCache
 
     route("/admin") {
 
@@ -34,20 +35,28 @@ fun Route.admin() {
          */
         post(path = "/login") {
             val userLogin = call.receive(UserLogin::class)
+//            try {
+            validate(userLogin, block = {
+                validate(UserLogin::userName).isNotBlank()
+                validate(UserLogin::pwd).isNotBlank()
+            })
+//            } catch (ex: ConstraintViolationException) {
+//                ex.constraintViolations
+//                        .mapToMessage(baseName = "messages", locale = Locale.CHINESE)
+//                        .map { "${it.property}: ${it.message}" }
+//                        .forEach(::println)
+//            }
             call.respondJson(userLogin)
         }
 
         /**
          * 普通的post，参数上传
          */
-        post(path = "/postParams") {
+        post(path = "/loginDef") {
             val parameters = call.receive<Parameters>()
-            val userName = parameters["userName"]
-            val pwd = parameters["pwd"]
-            val result = HashMap<String, String?>()
-            result["userName"] = userName
-            result["pwd"] = pwd
-            call.respondJson(result)
+            val userLogin = UserLogin(parameters[UserLogin::userName.name] ?: throw java.lang.Exception("用户账户不能为空！")
+                    , parameters[UserLogin::pwd.name] ?: throw java.lang.Exception("用户密码不能为空！"))
+            call.respondJson(userLogin)
         }
 
         get("/emptyAdmins") {
