@@ -31,7 +31,7 @@ fun Route.admin() {
         }
 
         /**
-         * jsonPost接口
+         * jsonPost接口,密码16位小写
          */
         post(path = "/login") {
             val userLogin = call.receive(UserLogin::class)
@@ -46,7 +46,7 @@ fun Route.admin() {
 //                        .map { "${it.property}: ${it.message}" }
 //                        .forEach(::println)
 //            }
-            call.respondJson(userLogin)
+            call.respondJson(adminUserService.login(userLogin), "登录成功！")
         }
 
         /**

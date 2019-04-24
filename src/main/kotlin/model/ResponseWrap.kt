@@ -14,13 +14,13 @@ class ResponseWrap : Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     var pageSize: Int? = null
 
-
-    fun warp(data: Any?): ResponseWrap {
+    @JvmOverloads
+    fun warp(data: Any?, msg: String? = null): ResponseWrap {
         if (null == data) return notFound()
         if (data is HttpStatusCode) return initHttpCode(data)
         if (data is List<*> && data.isEmpty()) return empty()
         this.code = HttpStatusCode.OK.value
-        this.msg = HttpStatusCode.OK.description
+        this.msg = msg ?: HttpStatusCode.OK.description
         this.data = data
         return this
     }
