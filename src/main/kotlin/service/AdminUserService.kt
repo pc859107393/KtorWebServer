@@ -1,6 +1,9 @@
 package service
 
+import data.UserLogin
 import database.DatabaseFactory.Companion.dbQuery
+import exception.NotFoundException
+import exception.UnauthorizedException
 import model.AdminUser
 import model.AdminUserDTO
 import org.jetbrains.exposed.sql.ResultRow
@@ -32,7 +35,7 @@ class AdminUserService {
                     .singleOrNull()
         }
 
-        query ?: throw Exception("用户不存在！")
+        query ?: throw NotFoundException("用户不存在！")
 
         if (!query.used) throw Exception("用户禁止登陆！")
 
@@ -40,7 +43,7 @@ class AdminUserService {
         if (lowerCase.length == 32) lowerCase = lowerCase.substring(8, 24)
         val sha256 = CipherUtil.sha256(lowerCase + query.createDate.toString())
         if (query.password != sha256)
-            throw Exception("用户名和密码不匹配！")
+            throw UnauthorizedException("用户名和密码不匹配！")
 
         return CipherUtil.small32md5(query.toString() + System.currentTimeMillis())
     }

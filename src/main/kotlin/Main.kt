@@ -1,11 +1,14 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import database.DatabaseFactory
+import exception.NotFoundException
+import exception.UnauthorizedException
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.jackson.jackson
+import io.ktor.request.uri
 import io.ktor.response.respondJson
 import io.ktor.routing.Routing
 import io.ktor.routing.route
@@ -29,7 +32,7 @@ fun Application.main() {
 @KtorExperimentalAPI
 class Main {
 
-    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+    private val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
     fun Application.main() {
         val config = environment.config
@@ -56,18 +59,21 @@ class Main {
         //全局异常处理
         install(StatusPages) {
             //数据校验异常捕获输出
-            exception<ConstraintViolationException> { cause ->
-                logger.error(cause)
-                call.respondJson(HttpStatusCode(HttpStatusCode.InternalServerError.value,
-                        cause.constraintViolations.mapToMessage(baseName = "messages", locale = Locale.CHINESE)
-                                .map { "${it.property}: ${it.message}" }
-                                .toString())
-                )
-            }
-
             exception<Throwable> { cause ->
+                var code = HttpStatusCode.InternalServerError.value
+                var msg = cause.message
                 logger.error(cause)
-                call.respondJson(HttpStatusCode(HttpStatusCode.InternalServerError.value, cause.message.toString()))
+                when (cause) {
+                    is NotFoundException -> code = HttpStatusCode.NotFound.value
+                    is ConstraintViolationException -> {
+                        code = HttpStatusCode.Unauthorized.value
+                        msg = cause.constraintViolations.mapToMessage(baseName = "messages", locale = Locale.CHINESE)
+                                .map { "${it.property}: ${it.message}" }
+                                .first()
+                    }
+                    is UnauthorizedException -> code = HttpStatusCode.Unauthorized.value
+                }
+                call.respondJson(HttpStatusCode(code, msg ?: "Other Exception"))
             }
         }
 
@@ -107,8 +113,10 @@ class Main {
 //                    sb.append(it.key).append("=").append(it.value).append("&")
 //                }
 //                sb.append("}")
-            logger.info("Interceptor[start]${this.context.request.toLogString()}" +
-                    "\n$sb")
+            logger.info("Interceptor[start]${this.context.request.uri}" + "\n$sb")
+
+            //利用缓存用户权限列表+url拦截实现权限管理
+
             proceed()
         }
 

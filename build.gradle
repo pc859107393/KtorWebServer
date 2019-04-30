@@ -48,7 +48,7 @@ dependencies {
 
 //    compile "com.h2database:h2:$h2_version"
     compile "org.jetbrains.exposed:exposed:$exposed_version"
-    compile 'com.zaxxer:HikariCP:3.2.0'
+    compile 'com.zaxxer:HikariCP:3.3.1'
     compile 'org.valiktor:valiktor-core:0.4.0'
     runtime "mysql:mysql-connector-java:5.1.39"
 
