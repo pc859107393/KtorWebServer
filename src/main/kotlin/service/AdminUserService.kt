@@ -1,5 +1,6 @@
 package service
 
+import cache.Cache
 import data.UserLogin
 import database.DatabaseFactory.Companion.dbQuery
 import exception.NotFoundException
@@ -12,7 +13,7 @@ import org.jetbrains.exposed.sql.selectAll
 import utils.CipherUtil
 
 class AdminUserService {
-//    val adminUserCache = Cache.adminUserCache
+    val adminUserCache = Cache.adminUserCache
 
     suspend fun getTenAdmins(): List<AdminUserDTO> = dbQuery {
         AdminUser.selectAll().limit(10).map { toAdminUser(it) }
@@ -44,8 +45,10 @@ class AdminUserService {
         val sha256 = CipherUtil.sha256(lowerCase + query.createDate.toString())
         if (query.password != sha256)
             throw UnauthorizedException("用户名和密码不匹配！")
-
-        return CipherUtil.small32md5(query.toString() + System.currentTimeMillis())
+        //获取token放入缓存
+        val token = CipherUtil.small32md5(query.toString() + System.currentTimeMillis())
+        adminUserCache.put(token, query)
+        return token
     }
 
     private fun toAdminUser(row: ResultRow): AdminUserDTO =

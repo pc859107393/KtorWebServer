@@ -14,7 +14,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
-
+apply plugin: 'war'
 apply plugin: 'application'
 
 mainClassName = 'io.ktor.server.netty.DevelopmentEngine'
@@ -54,6 +54,7 @@ dependencies {
 
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile "net.logstash.logback:logstash-logback-encoder:5.1"
+    compile "org.apache.commons:commons-lang3:3.9"
 
     compile "io.ktor:ktor-locations:$ktor_version"
 

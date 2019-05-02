@@ -1,6 +1,7 @@
 package model
 
 import org.jetbrains.exposed.sql.Table
+import java.io.Serializable
 
 /**
  * 用户表
@@ -26,7 +27,7 @@ data class AdminUserDTO(
         val duty: String,
         val createDate: Long,
         val used: Boolean
-)
+) : Serializable
 
 /**
  * 创建用户
@@ -39,7 +40,7 @@ data class NewAdminUser(
         val duty: String,
         val createDate: Long,
         val used: Boolean
-)
+) : Serializable
 
 /**
  * 后台登录实体
@@ -47,4 +48,4 @@ data class NewAdminUser(
 data class LoginAdmin(
         val loginName: String,
         val password: String
-)
+) : Serializable

@@ -12,6 +12,7 @@ import io.ktor.routing.route
 import org.valiktor.functions.isNotBlank
 import org.valiktor.validate
 import service.AdminUserService
+import utils.LoginValidate
 
 fun Route.admin() {
 
@@ -22,6 +23,7 @@ fun Route.admin() {
     route("/admin") {
 
         get("/") {
+            LoginValidate.validateAdmin(call.request)
             call.respondJson(adminUserService.getTenAdmins())
         }
 
@@ -35,17 +37,10 @@ fun Route.admin() {
          */
         post(path = "/login") {
             val userLogin = call.receive(UserLogin::class)
-//            try {
             validate(userLogin, block = {
                 validate(UserLogin::userName).isNotBlank()
                 validate(UserLogin::pwd).isNotBlank()
             })
-//            } catch (ex: ConstraintViolationException) {
-//                ex.constraintViolations
-//                        .mapToMessage(baseName = "messages", locale = Locale.CHINESE)
-//                        .map { "${it.property}: ${it.message}" }
-//                        .forEach(::println)
-//            }
             call.respondJson(adminUserService.login(userLogin), "登录成功！")
         }
 
