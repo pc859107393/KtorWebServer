@@ -22,3 +22,81 @@ GET http://{{host}}:{{port}}/admin
 GET http://localhost:8181/admin/page/1
 
 ###
+
+POST https://gateway.xiw6666.com/Pay
+Content-Type: application/x-www-form-urlencoded
+
+fxnotifyurl=http://pay.11086zhifu2568.top/pay/youyouNotice.html&fxddh=2019041815374251&fxip=115.135.82.222&fxpay=zfbsm&fxid=2018142&fxbackurl=http://pay.11086zhifu2568.top/pay/yuanbaoReturnUrl.html&fxdesc=支付宝&fxfee=300.00&fxsign=66f6dd1e69ec9bceeda6acd3e40cef4c
+
+###
+
+POST http://h5.coaswa.com/doc/PayOrder
+Content-Type: application/json
+
+{
+  "timestamp": "1555749391433",
+  "sign": "77BFA7F69C0F16BCFA7A1CC70B938E70",
+  "nonce": "F12EE9734E1EDF70ED02D9829018B3D9",
+  "data": "4a6407f46d7e9a24617942f90fa7f00560e589fb0e2b27caaafd295ca1f7cc8268f59f63926c04b351946012b6907ab389e1eb974f88a7d3e091526a7a26e69e29e88f78afd45bd636672f52d492f3b6fdcac0bb3a4943191b1f53a9aaaf31c70bc6eac5f0a4d040844d3fddf665dc89b4d5c3a372893bc4032fb949994521c1606e1b46812580c2f53d9cd1cf778ff14143173d12390705c5c3b03b2ec42f41f47a3071e3966b758b0ef4121b1c3d31e673a52ef777614df69a6f67f3bca8f4e6ad3a80c03d126977afd6a9f638a62363c8460789c709fa768fbc0b0a9ef532936e93bbe3efc902459a2e35fe53e2848edaba9ca64e4c1994e4dbcd18e3bb5379d3c55e23922c40d514dc769f966bb2161d7edeed2e324ad4ddf70f97a2e5b88266951ad7cdcb6f0122576634dc9eb267cff161df7047e55fda35021505a301af65ebab103348a731cda7994bba91309c91107e62702ef3c078859ae1a745d628a9d0809f841863353a0c2900613d78ef0487c680d1cb2fbf0c92e1dcc1169ad607c17f2fb0c53238386c6a051b5a3008358c03e764ce1581781021f9874ee1d2b56a5c4d081f2f3ced0fa8cd6cd363",
+  "signtype": "MD5"
+}
+
+###
+
+POST http://localhost:8080/pay/shuangmaNotice
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Cache-Control: no-cache
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxid"
+
+103
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxddh"
+
+2019042018345141
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxdesc"
+
+103
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxorder"
+
+2019042018345141
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxfee"
+
+300.00
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxattch"
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxtime"
+
+1555751166
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxstatus"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fxsign"
+
+70b49b27a71b919d2879abb1f530fea2
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+POST http://heygoo.com:96/api/pay/create_order
+Content-Type: application/x-www-form-urlencoded
+
+params={"sign":"BD900A04B12A32AE59E892E5F4091EB0","amount":30000,"body":"%E6%94%AF%E4%BB%98%E5%AE%9D%EF%BC%8C%E5%BC%95%E9%A2%86%E6%94%AF%E4%BB%98%E6%96%B0%E6%97%B6%E6%BD%AE%7E","appId":"9d225d938acf40b99200d82d66c6a8cd","subject":"yidong888","mchOrderNo":"201904201119616464535552000","mchId":20000212,"notifyUrl":"http://pay.zhifu69.top//pay/hengxinNotice","productId":"4","currency":"cny"}
+
+###
+
+POST https://aap.yrzpay.com/aap_action/aapPay/createPayOrder
+Content-Type: application/x-www-form-urlencoded
+
+userName=16A63B9FFC9&data=rf9mukyhbqny2bwr4kc89tg7zeu0kfv7q%2fbk0redumanka%2bldkiwdrjt0lq8hrrwtowiuyo2xrgxno9xc03vj06kjo%2bl5wisklexpoqxrd4zoewtbwffm8m68qs628lyie20ig22bv0b67mfzutkuuj7u1gqoltybvygl0dmwjkqch1%2fxli98u017sl%2bavxfqa9gpk8gceasvcgdsghwioba4%2b2lme2g%2fwjmqzcedkgrlclvbth1wtafp7wrzfvmqqbclrrvsjjr5efrdocd22ypm%2bt34ih92va5whp092zkot%2froftdhzh6t2xpurum5kzqyf7minjbx0xrkgptlxsumorwfnyzijmn3brtckl7vq3vmba18rzi18ixcoriuatl0dxplsgxig%2fzuldlrmgzzowxt322ilvnfenwmxu3ohaidlqubpyvpy3n5moijyjosk41lla3eovf8qjs%2bs3vpc2l4gki68ho9fkqrmocrvxrp6tgpmj2mdvnflzo
+
+###
