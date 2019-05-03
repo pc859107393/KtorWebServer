@@ -5,19 +5,29 @@ buildscript {
 //    ext.h2_version = '1.4.196'
 
     repositories {
-        mavenCentral()
+//        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        //jar
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
     }
 }
 
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'war'
 apply plugin: 'application'
 
 mainClassName = 'io.ktor.server.netty.DevelopmentEngine'
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
 
 sourceCompatibility = 1.8
 compileKotlin {
