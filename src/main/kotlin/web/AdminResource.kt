@@ -65,5 +65,9 @@ fun Route.admin() {
                     , pageNum
                     , 20)
         }
+
+        get("/getAllFromCache") {
+            call.respondJson(adminUserService.getAllAdminUserFromCache())
+        }
     }
 }

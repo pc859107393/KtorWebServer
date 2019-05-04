@@ -16,7 +16,7 @@ object LoginValidate {
             if (!request.headers.names().contains("token") || StringUtils.isBlank(request.headers["token"]))
                 throw UnauthorizedException("管理员未登录！")
             else
-                Cache.adminUserCache.get(request.headers["token"]).also {
+                Cache.adminUserLoginCache.get(request.headers["token"]).also {
                     if (ObjectUtils.isEmpty(it)) throw throw UnauthorizedException("管理员未登录！")
                 }
 

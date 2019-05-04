@@ -18,13 +18,25 @@ object Cache {
             .newEventListenerConfiguration(EhCacheEventListener(), EventType.EXPIRED)
             .unordered().asynchronous()
 
-    private val adminUserCacheConfiguration = CacheConfigurationBuilder
+    private val adminLoginCacheConfiguration = CacheConfigurationBuilder
             .newCacheConfigurationBuilder<String, AdminUserDTO>(String::class.javaObjectType, AdminUserDTO::class.java
                     , ResourcePoolsBuilder.newResourcePoolsBuilder()
                     .heap(10, MemoryUnit.KB)    //堆缓存空间
                     .offheap(20, MemoryUnit.MB) //堆外缓存空间
                     .disk(500, MemoryUnit.MB, true))  //磁盘缓存空间
-            .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(300)))
+            .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(1800))) //半个钟头的过期时间
+            .withSizeOfMaxObjectGraph(1000L)
+            .withSizeOfMaxObjectSize(1L, MemoryUnit.KB)
+            .add(cacheEventListenerConfiguration)
+            .build()
+
+    private val adminUserCacheConfiguration = CacheConfigurationBuilder
+            .newCacheConfigurationBuilder<Int, AdminUserDTO>(Int::class.javaObjectType, AdminUserDTO::class.java
+                    , ResourcePoolsBuilder.newResourcePoolsBuilder()
+                    .heap(10, MemoryUnit.KB)    //堆缓存空间
+                    .offheap(20, MemoryUnit.MB) //堆外缓存空间
+                    .disk(500, MemoryUnit.MB, true))  //磁盘缓存空间
+            .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(1800))) //半个钟头的过期时间
             .withSizeOfMaxObjectGraph(1000L)
             .withSizeOfMaxObjectSize(1L, MemoryUnit.KB)
             .add(cacheEventListenerConfiguration)
@@ -38,8 +50,8 @@ object Cache {
     /*
     * 后台admin缓存
     * */
-    val adminUserCache = cacheManager.createCache<String, AdminUserDTO>("adminUsers"
-            , adminUserCacheConfiguration)
+    val adminUserLoginCache = cacheManager.createCache<String, AdminUserDTO>("adminLogin"
+            , adminLoginCacheConfiguration)
 
-
+    val adminIdCache = cacheManager.createCache<Int, AdminUserDTO>("adminUsers", adminUserCacheConfiguration)
 }

@@ -23,7 +23,7 @@ data class AdminUserDTO(
         val id: Int,
         val name: String,
         val loginName: String,
-        val password: String,
+        var password: String,
         val duty: String,
         val createDate: Long,
         val used: Boolean

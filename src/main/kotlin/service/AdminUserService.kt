@@ -7,23 +7,108 @@ import exception.NotFoundException
 import exception.UnauthorizedException
 import model.AdminUser
 import model.AdminUserDTO
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import model.NewAdminUser
+import org.jetbrains.exposed.sql.*
+import org.joda.time.DateTime
 import utils.CipherUtil
 
 class AdminUserService {
-    val adminUserCache = Cache.adminUserCache
+
+    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+
+    val adminUserCache = Cache.adminUserLoginCache
+    val adminIdCache = Cache.adminIdCache
 
     suspend fun getTenAdmins(): List<AdminUserDTO> = dbQuery {
-        AdminUser.selectAll().limit(10).map { toAdminUser(it) }
+        AdminUser.selectAll().limit(10)
+                .map {
+                    val adminUser = toAdminUser(it)
+                    adminIdCache.put(adminUser.id, adminUser)   //存入到id-adminUser缓存中
+                    adminUser.password = ""
+                    return@map adminUser
+                }
     }
 
-    suspend fun getAdminsByPage(pageNum: Int, pageSize: Int = 20): List<AdminUserDTO> = dbQuery {
-        AdminUser.selectAll()
-                .limit(pageSize, if (pageNum - 1 > 0) pageSize * (pageNum - 1) else 0)
-                .orderBy(AdminUser.id, false)
-                .map { toAdminUser(it) }
+    suspend fun getAllAdminUserFromCache(): Collection<AdminUserDTO> {
+        val result = mutableListOf<AdminUserDTO>()
+        logger.info("缓存长度 -> ${adminIdCache.count()}")
+        adminIdCache.sortedByDescending { entry -> entry.key }.forEachIndexed { index, entry -> if (index < 10) result.add(entry.value) }
+        return result
+    }
+
+    /**
+     * 先从缓存中拿取数据，如果数据不存在再去数据库中读取
+     */
+    suspend fun getAdminsByPage(pageNum: Int, pageSize: Int = 20): List<AdminUserDTO> {
+        val result = mutableListOf<AdminUserDTO>()
+        val startIndex = if (pageNum - 1 == 0) 0 else (pageNum - 1) * pageSize
+        val endIndex = pageNum * pageSize
+        adminIdCache.sortedByDescending { entry -> entry.key }.forEachIndexed { index, entry -> if (index in (startIndex + 1)..(endIndex - 1)) result.add(entry.value) }
+
+        if (result.isNotEmpty()) {
+            logger.info("获取管理员分页 -> 从缓存中获取！")
+            return result
+        } else return dbQuery {
+            logger.info("获取管理员分页 -> 从数据库中获取！")
+            AdminUser.selectAll()
+                    .limit(pageSize, if (pageNum - 1 > 0) pageSize * (pageNum - 1) else 0)
+                    .orderBy(AdminUser.id, false)
+                    .map {
+                        val adminUser = toAdminUser(it)
+                        adminIdCache.put(adminUser.id, adminUser)   //存入到id-adminUser缓存中
+                        adminUser.password = ""
+                        return@map adminUser
+                    }
+        }
+    }
+
+    /**
+     * 更新数据库后，直接把对应id的缓存替换就行
+     */
+    suspend fun updateAdmin(admin: NewAdminUser): AdminUserDTO {
+        admin.id ?: throw NotFoundException("该用户不存在！")
+        dbQuery {
+            AdminUser.update({ AdminUser.id eq admin.id }) {
+                it[name] = admin.name
+                it[password] = admin.password
+                it[used] = admin.used
+            }
+        }
+
+        dbQuery {
+            AdminUser.select { AdminUser.id eq admin.id }
+                    .mapNotNull { toAdminUser(it) }
+                    .single()
+        }.also {
+            adminIdCache.put(it.id, it)
+            return it
+        }
+    }
+
+    /**
+     * 数据库添加用户后，拿着对应信息存入redis
+     */
+    suspend fun addAdmin(admin: NewAdminUser): AdminUserDTO {
+        var key: Int? = null
+        val now = DateTime.now()
+        var lowerCase = admin.password.toLowerCase()
+        if (lowerCase.length == 32) lowerCase = lowerCase.substring(8, 24)
+        val pwd = CipherUtil.sha256(lowerCase + now.toString())
+        dbQuery {
+            key = (AdminUser.insert {
+                it[name] = admin.name
+                it[password] = pwd
+                it[duty] = admin.duty
+                it[loginName] = admin.loginName
+                it[used] = admin.used
+                it[createDate] = now
+            } get AdminUser.id)
+        }
+        key ?: throw Exception("添加管理员失败！")
+        AdminUserDTO(key!!, admin.name, admin.loginName, pwd, admin.duty, now.millis, admin.used).also {
+            adminIdCache.put(key!!, it)
+            return it
+        }
     }
 
     /**
