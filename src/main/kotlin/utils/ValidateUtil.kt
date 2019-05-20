@@ -7,7 +7,7 @@ import model.AdminUserDTO
 import org.apache.commons.lang3.ObjectUtils
 import org.apache.commons.lang3.StringUtils
 
-object LoginValidate {
+object ValidateUtil {
 
     /**
      * 根据请求头检查管理员用户是否存在

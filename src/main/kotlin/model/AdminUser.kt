@@ -11,7 +11,7 @@ object AdminUser : Table("admin_user") {
     val name = varchar("name", 50)
     val loginName = varchar("login_name", 25)
     val password = varchar("password", 256)
-    val duty = varchar("duty", 50)
+    val duty = varchar("duty", 4096)
     val createDate = date("create_date")
     val used = bool("used")
 }

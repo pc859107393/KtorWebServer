@@ -9,22 +9,54 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
+import org.json.simple.JSONObject
 import org.valiktor.functions.isNotBlank
 import org.valiktor.validate
+import service.AdminMenuService
 import service.AdminUserService
-import utils.LoginValidate
+import utils.ValidateUtil
 
 fun Route.admin() {
 
     val adminUserService = AdminUserService()
+
+    val adminMenuService = AdminMenuService()
 
     val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
     route("/admin") {
 
         get("/") {
-            LoginValidate.validateAdmin(call.request)
-            call.respondJson(adminUserService.getTenAdmins())
+            call.respondJson(ValidateUtil.validateAdmin(call.request).also { it.password = "" })
+        }
+
+        /**
+         * 权限菜单
+         */
+        get("/menus") {
+            val adminUserDTO = ValidateUtil.validateAdmin(call.request)
+            val menus = adminMenuService.getMenusFromCache(adminUserDTO)
+            //父菜单
+            val parent = menus.filter { dto -> dto.parentId == 0 }.sortedBy { dto -> dto.sort }
+
+            val result = mutableListOf<Any>()
+
+            //迭代父菜单
+            parent.forEach {
+                val menu = JSONObject()
+                //菜单id
+                menu[it::id] = it.id
+                //菜单序号
+                menu[it::sort] = it.sort
+                //菜单名称
+                menu[it::name] = it.name
+                //菜单图标
+                menu[it::icon] = it.icon
+                //存放子菜单
+                menu["son"] = menus.filter { dto -> dto.parentId == it.id }.sortedBy { dto -> dto.sort }
+                result.add(menu)
+            }
+            call.respondJson(result)
         }
 
         get("/exception") {
@@ -59,6 +91,7 @@ fun Route.admin() {
         }
 
         get("/page/{pageNum}") {
+            ValidateUtil.validateAdmin(call.request)
             var pageNum = call.parameters["pageNum"]?.toInt()!!
             if (pageNum < 1) pageNum = 1
             call.respondJson(adminUserService.getAdminsByPage(pageNum)

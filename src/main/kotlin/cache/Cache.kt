@@ -1,5 +1,6 @@
 package cache
 
+import model.AdminMenuDTO
 import model.AdminUserDTO
 import org.ehcache.config.builders.*
 import org.ehcache.config.units.MemoryUnit
@@ -36,7 +37,17 @@ object Cache {
                     .heap(10, MemoryUnit.KB)    //堆缓存空间
                     .offheap(20, MemoryUnit.MB) //堆外缓存空间
                     .disk(500, MemoryUnit.MB, true))  //磁盘缓存空间
-            .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(1800))) //半个钟头的过期时间
+            .withSizeOfMaxObjectGraph(1000L)
+            .withSizeOfMaxObjectSize(1L, MemoryUnit.KB)
+            .add(cacheEventListenerConfiguration)
+            .build()
+
+    private val adminMenuCacheConfiguration = CacheConfigurationBuilder
+            .newCacheConfigurationBuilder<Int, AdminMenuDTO>(Int::class.javaObjectType, AdminMenuDTO::class.java
+                    , ResourcePoolsBuilder.newResourcePoolsBuilder()
+                    .heap(10, MemoryUnit.KB)    //堆缓存空间
+                    .offheap(20, MemoryUnit.MB) //堆外缓存空间
+                    .disk(500, MemoryUnit.MB, true))  //磁盘缓存空间
             .withSizeOfMaxObjectGraph(1000L)
             .withSizeOfMaxObjectSize(1L, MemoryUnit.KB)
             .add(cacheEventListenerConfiguration)
@@ -54,4 +65,6 @@ object Cache {
             , adminLoginCacheConfiguration)
 
     val adminIdCache = cacheManager.createCache<Int, AdminUserDTO>("adminUsers", adminUserCacheConfiguration)
+
+    val adminMenuIdCache = cacheManager.createCache<Int, AdminMenuDTO>("adminMenus", adminMenuCacheConfiguration)
 }

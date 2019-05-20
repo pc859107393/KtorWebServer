@@ -1,6 +1,7 @@
 package model
 
 import org.jetbrains.exposed.dao.IntIdTable
+import java.io.Serializable
 
 /**
  * 菜单表
@@ -19,6 +20,10 @@ object AdminMenu : IntIdTable() {
 
     val updateDate = date("update_date")
 
+    /**
+     * 菜单排序
+     */
+    val sort = integer("sort").default(0)
 }
 
 /**
@@ -27,12 +32,13 @@ object AdminMenu : IntIdTable() {
 data class AdminMenuDTO(
         val id: Int,
         val parentId: Int,
+        val sort: Int,
         val name: String,
         val uri: String,
         val icon: String,
         val createDate: Long,
         val updateDate: Long
-)
+) : Serializable
 
 /**
  * 新增用户菜单
@@ -40,6 +46,7 @@ data class AdminMenuDTO(
 data class NewAdminMenu(
         val id: Int?,
         val parentId: Int,
+        val sort: Int,
         val name: String,
         val uri: String,
         val icon: String,
