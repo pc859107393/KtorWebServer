@@ -69,6 +69,8 @@ dependencies {
     compile "io.ktor:ktor-locations:$ktor_version"
 
     compile 'org.ehcache:ehcache:3.6.3'
+    // https://mvnrepository.com/artifact/com.alibaba/fastjson
+    compile "com.alibaba:fastjson:1.2.47"
 
     testCompile "org.assertj:assertj-core:3.11.1"
     testCompile "io.rest-assured:rest-assured:3.2.0"
