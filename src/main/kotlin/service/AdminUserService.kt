@@ -32,7 +32,7 @@ class AdminUserService {
     suspend fun getAllAdminUserFromCache(): Collection<AdminUserDTO> {
         val result = mutableListOf<AdminUserDTO>()
         logger.info("缓存长度 -> ${adminIdCache.count()}")
-        adminIdCache.sortedByDescending { entry -> entry.key }.forEachIndexed { index, entry -> if (index < 10) result.add(entry.value) }
+        adminIdCache.sortedByDescending { entry -> entry.key }.forEach { result.add(it.value) }
         return result
     }
 
@@ -40,15 +40,15 @@ class AdminUserService {
      * 先从缓存中拿取数据，如果数据不存在再去数据库中读取
      */
     suspend fun getAdminsByPage(pageNum: Int, pageSize: Int = 20): List<AdminUserDTO> {
-        val result = mutableListOf<AdminUserDTO>()
-        val startIndex = if (pageNum - 1 == 0) 0 else (pageNum - 1) * pageSize
-        val endIndex = pageNum * pageSize
-        adminIdCache.sortedByDescending { entry -> entry.key }.forEachIndexed { index, entry -> if (index in (startIndex + 1)..(endIndex - 1)) result.add(entry.value) }
-
-        if (result.isNotEmpty()) {
-            logger.info("获取管理员分页 -> 从缓存中获取！")
-            return result
-        } else return dbQuery {
+//        val result = mutableListOf<AdminUserDTO>()
+//        val startIndex = if (pageNum - 1 == 0) 0 else (pageNum - 1) * pageSize
+//        val endIndex = pageNum * pageSize
+//        adminIdCache.sortedByDescending { entry -> entry.key }.forEachIndexed { index, entry -> if (index in (startIndex + 1)..(endIndex - 1)) result.add(entry.value) }
+//        if (result.isNotEmpty()) {
+//            logger.info("获取管理员分页 -> 从缓存中获取！")
+//            return result
+//        } else
+        return dbQuery {
             logger.info("获取管理员分页 -> 从数据库中获取！")
             AdminUser.selectAll()
                     .limit(pageSize, if (pageNum - 1 > 0) pageSize * (pageNum - 1) else 0)
