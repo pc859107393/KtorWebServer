@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import database.DatabaseFactory
+import exception.ForbiddenException
 import exception.NotFoundException
 import exception.UnauthorizedException
 import io.ktor.application.*
@@ -73,12 +74,13 @@ fun Application.main() {
             when (cause) {
                 is NotFoundException -> code = HttpStatusCode.NotFound.value
                 is ConstraintViolationException -> {
-                    code = HttpStatusCode.Unauthorized.value
+                    code = HttpStatusCode.BadRequest.value
                     msg = cause.constraintViolations.mapToMessage(baseName = "messages", locale = Locale.CHINESE)
                             .map { "${it.property}: ${it.message}" }
                             .first()
                 }
                 is UnauthorizedException -> code = HttpStatusCode.Unauthorized.value
+                is ForbiddenException -> code = HttpStatusCode.Forbidden.value
             }
             call.respondJson(HttpStatusCode(code, msg ?: "Other Exception"))
         }

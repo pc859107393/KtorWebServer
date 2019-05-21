@@ -3,11 +3,13 @@ package service
 import cache.Cache
 import data.UserLogin
 import database.DatabaseFactory.Companion.dbQuery
+import exception.ForbiddenException
 import exception.NotFoundException
 import exception.UnauthorizedException
 import model.AdminUser
 import model.AdminUserDTO
 import model.NewAdminUser
+import org.apache.commons.lang3.StringUtils
 import org.jetbrains.exposed.sql.*
 import org.joda.time.DateTime
 import utils.CipherUtil
@@ -29,7 +31,7 @@ class AdminUserService {
                 }
     }
 
-    suspend fun getAllAdminUserFromCache(): Collection<AdminUserDTO> {
+    fun getAllAdminUserFromCache(): Collection<AdminUserDTO> {
         val result = mutableListOf<AdminUserDTO>()
         logger.info("缓存长度 -> ${adminIdCache.count()}")
         adminIdCache.sortedByDescending { entry -> entry.key }.forEach { result.add(it.value) }
@@ -123,15 +125,16 @@ class AdminUserService {
 
         query ?: throw NotFoundException("用户不存在！")
 
-        if (!query.used) throw Exception("用户禁止登陆！")
+        if (!query.used) throw ForbiddenException("用户禁止登陆！")
 
         var lowerCase = user.pwd.toLowerCase()
         if (lowerCase.length == 32) lowerCase = lowerCase.substring(8, 24)
         val sha256 = CipherUtil.sha256(lowerCase + query.createDate.toString())
         if (query.password != sha256)
             throw UnauthorizedException("用户名和密码不匹配！")
-        //获取token放入缓存
-        val token = CipherUtil.small32md5(query.toString() + System.currentTimeMillis())
+        //获取token放入缓存，上次缓存的用户还存在，则继续使用上次的
+        val lastToken = adminUserCache.find { it.value.id == query.id }?.key
+        val token = if (StringUtils.isNotBlank(lastToken)) lastToken!! else CipherUtil.small32md5(query.toString() + System.currentTimeMillis())
         adminUserCache.put(token, query)
         return token
     }
