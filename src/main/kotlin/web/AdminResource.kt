@@ -43,15 +43,15 @@ fun Route.admin() {
 
             //迭代父菜单
             parent.forEach {
-                val menu = JSONObject()
+                val menu = mutableMapOf<String, Any>()
                 //菜单id
-                menu[it::id] = it.id
+                menu[it::id.name] = it.id
                 //菜单序号
-                menu[it::sort] = it.sort
+                menu[it::sort.name] = it.sort
                 //菜单名称
-                menu[it::name] = it.name
+                menu[it::name.name] = it.name
                 //菜单图标
-                menu[it::icon] = it.icon
+                menu[it::icon.name] = it.icon
                 //存放子菜单
                 menu["son"] = menus.filter { dto -> dto.parentId == it.id }.sortedBy { dto -> dto.sort }
                 result.add(menu)
@@ -101,6 +101,11 @@ fun Route.admin() {
 
         get("/getAllFromCache") {
             call.respondJson(adminUserService.getAllAdminUserFromCache())
+        }
+
+        get("/notifyMenu") {
+            ValidateUtil.validateAdmin(call.request)
+            call.respondJson(adminMenuService.notifyMenu())
         }
     }
 }

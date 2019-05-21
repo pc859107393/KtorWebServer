@@ -8,24 +8,15 @@ import java.util.*
 
 object JSONUtil {
 
-    private val log = org.slf4j.LoggerFactory.getLogger(this::class.java)
-
     /**
      * toJSONStr:对象序列化成json串
      *
      * @param object
      * @return
      */
-    fun toJSONStr(`object`: Any?): String? {
-        if (`object` != null) {
-            try {
-                return JSON.toJSONString(`object`)
-            } catch (e: Exception) {
-                log.error(e.message)
-            }
-        }
-        return null
-    }
+    @Throws(Exception::class)
+    fun toJSONStr(`object`: Any?): String? =
+            if (`object` != null) JSON.toJSONString(`object`) else null
 
     /**
      * json串序列化成对象
@@ -35,18 +26,9 @@ object JSONUtil {
      * @param <T>
      * @return
     </T> */
-    fun <T> toObject(string: String, objClass: Class<T>): T? {
-        if (StringUtils.isNotBlank(string)) {
-            try {
-                val tmp = string.trim { it <= ' ' }
-                return JSON.parseObject(tmp, objClass)
-            } catch (e: Exception) {
-                log.error(e.message)
-            }
-
-        }
-        return null
-    }
+    @Throws(Exception::class)
+    fun <T> toObject(string: String, objClass: Class<T>): T? =
+            if (StringUtils.isNotBlank(string)) JSON.parseObject(string, objClass) else null
 
     /**
      * json串序列化成对象集合
@@ -56,16 +38,9 @@ object JSONUtil {
      * @param <T>
      * @return
     </T> */
-    fun <T> toArray(string: String, objClass: Class<T>): List<T>? {
-        if (StringUtils.isNotBlank(string)) {
-            try {
-                return JSON.parseArray(string, objClass)
-            } catch (e: Exception) {
-                log.error(e.message)
-            }
-        }
-        return null
-    }
+    @Throws(Exception::class)
+    fun <T> toArray(string: String, objClass: Class<T>): List<T>? =
+            if (StringUtils.isNotBlank(string)) JSON.parseArray(string, objClass) else null
 
     /**
      * 在json对象中查找某个key的value
@@ -75,9 +50,9 @@ object JSONUtil {
      * @return
      */
     @NotNull
-    fun getValueFromJson(@NotNull json: String, @NotNull key: String): String {
-        return JSONObject.parseObject(json).getString(key) ?: ""
-    }
+    @Throws(Exception::class)
+    fun getValueFromJson(@NotNull json: String, @NotNull key: String) =
+            JSONObject.parseObject(json).getString(key) ?: ""
 
     fun JsonToMap(str: String): SortedMap<String, String> {
         val data = TreeMap<String, String>()

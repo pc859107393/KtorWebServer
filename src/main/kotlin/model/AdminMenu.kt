@@ -6,13 +6,13 @@ import java.io.Serializable
 /**
  * 菜单表
  */
-object AdminMenu : IntIdTable() {
+object AdminMenu : IntIdTable("admin_menu") {
     //菜单名称
     val name = varchar("name", 50)
     //请求uri
-    val uri = varchar("uri", 128)
+    val uri = varchar("uri", 128).nullable()
     //图标
-    val icon = varchar("icon", 128)
+    val icon = varchar("icon", 128).nullable()
     //父菜单
     val parentId = integer("parent_id").default(0)
 
