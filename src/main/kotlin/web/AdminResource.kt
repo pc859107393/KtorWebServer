@@ -1,5 +1,6 @@
 package web
 
+import com.alibaba.fastjson.JSONObject
 import data.UserLogin
 import io.ktor.application.call
 import io.ktor.http.Parameters
@@ -9,7 +10,6 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
-import org.json.simple.JSONObject
 import org.valiktor.functions.isNotBlank
 import org.valiktor.validate
 import service.AdminMenuService
@@ -27,7 +27,34 @@ fun Route.admin() {
     route("/admin") {
 
         get("/") {
-            call.respondJson(ValidateUtil.validateAdmin(call.request).also { it.password = "" })
+
+            val adminUserDTO = ValidateUtil.validateAdmin(call.request).also { it.password = "" }
+            val menus = adminMenuService.getMenusFromCache(adminUserDTO)
+            //父菜单
+            val parent = menus.filter { dto -> dto.parentId == 0 }.sortedBy { dto -> dto.sort }
+
+            val result = mutableListOf<Any>()
+
+            //迭代父菜单
+            parent.forEach {
+                val menu = mutableMapOf<String, Any>()
+                //菜单id
+                menu[it::id.name] = it.id
+                //菜单序号
+                menu[it::sort.name] = it.sort
+                //菜单名称
+                menu[it::name.name] = it.name
+                //菜单图标
+                menu[it::icon.name] = it.icon
+                //存放子菜单
+                menu["son"] = menus.filter { dto -> dto.parentId == it.id }.sortedBy { dto -> dto.sort }
+                result.add(menu)
+            }
+
+            val data = JSONObject()
+            data["user"] = adminUserDTO
+            data["roles"] = result
+            call.respondJson(data)
         }
 
         /**

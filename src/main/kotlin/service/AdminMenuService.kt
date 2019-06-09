@@ -15,11 +15,11 @@ import utils.JSONUtil
  */
 class AdminMenuService {
 
-    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+    private val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
-    val adminMenuCache = Cache.adminMenuIdCache
+    private val adminMenuCache = Cache.adminMenuIdCache
 
-    val siteConfigService = SiteConfigService()
+    private val siteConfigService = SiteConfigService()
 
     /**
      * 刷新所有权限，并放入缓存中
@@ -36,7 +36,7 @@ class AdminMenuService {
      * 获取用户权限，从缓存中获取
      */
     suspend fun getMenusFromCache(admin: AdminUserDTO): MutableList<AdminMenuDTO> {
-        var menuIds: List<Int>? = emptyList<Int>()
+        val menuIds: List<Int>?
         val menus = mutableListOf<AdminMenuDTO>()
         val duty = admin.duty
         menuIds = try {
