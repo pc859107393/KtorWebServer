@@ -61,7 +61,7 @@ dependencies {
     compile "org.jetbrains.exposed:exposed:$exposed_version"
     compile 'com.zaxxer:HikariCP:3.3.1'
     compile 'org.valiktor:valiktor-core:0.4.0'
-    runtime "mysql:mysql-connector-java:5.1.39"
+    runtime "mysql:mysql-connector-java:8.0.15"
 
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile "net.logstash.logback:logstash-logback-encoder:5.1"
