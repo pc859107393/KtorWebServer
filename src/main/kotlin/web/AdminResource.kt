@@ -127,11 +127,12 @@ fun Route.admin() {
         }
 
         get("/getAllFromCache") {
+            ValidateUtil.validateAdmin(call.request, true)
             call.respondJson(adminUserService.getAllAdminUserFromCache())
         }
 
         get("/notifyMenu") {
-            ValidateUtil.validateAdmin(call.request)
+            ValidateUtil.validateAdmin(call.request, true)
             call.respondJson(adminMenuService.notifyMenu())
         }
     }

@@ -16,10 +16,10 @@ import utils.CipherUtil
 
 class AdminUserService {
 
-    val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
+    private val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
-    val adminUserCache = Cache.adminUserLoginCache
-    val adminIdCache = Cache.adminIdCache
+    private val adminUserCache = Cache.adminUserLoginCache
+    private val adminIdCache = Cache.adminIdCache
 
     suspend fun getTenAdmins(): List<AdminUserDTO> = dbQuery {
         AdminUser.selectAll().limit(10)
@@ -54,7 +54,7 @@ class AdminUserService {
             logger.info("获取管理员分页 -> 从数据库中获取！")
             AdminUser.selectAll()
                     .limit(pageSize, if (pageNum - 1 > 0) pageSize * (pageNum - 1) else 0)
-                    .orderBy(AdminUser.id, false)
+                    .orderBy(AdminUser.id, SortOrder.DESC)
                     .map {
                         val adminUser = toAdminUser(it)
                         adminIdCache.put(adminUser.id, adminUser)   //存入到id-adminUser缓存中
@@ -67,8 +67,8 @@ class AdminUserService {
     /**
      * 更新数据库后，直接把对应id的缓存替换就行
      */
-    suspend fun updateAdmin(admin: NewAdminUser): AdminUserDTO {
-        admin.id ?: throw NotFoundException("该用户不存在！")
+    suspend fun putAdmin(admin: NewAdminUser): AdminUserDTO {
+        admin.id ?: return addAdmin(admin)
         dbQuery {
             AdminUser.update({ AdminUser.id eq admin.id }) {
                 it[name] = admin.name
