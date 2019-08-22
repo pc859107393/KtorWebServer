@@ -2,10 +2,10 @@
 //
 //import common.ServerTest
 //import kotlinx.coroutines.runBlocking
-//import model.ChangeType
-//import model.NewWidget
-//import model.Notification
-//import model.Widget
+//import acheng1314.cn.ChangeType
+//import acheng1314.cn.NewWidget
+//import acheng1314.cn.Notification
+//import acheng1314.cn.Widget
 //import org.assertj.core.api.Assertions.assertThat
 //import org.junit.jupiter.api.Nested
 //import org.junit.jupiter.api.Test

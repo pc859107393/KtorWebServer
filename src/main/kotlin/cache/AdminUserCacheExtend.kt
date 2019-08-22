@@ -1,7 +1,0 @@
-package cache
-
-class AdminUserCacheExtend {
-
-
-
-}

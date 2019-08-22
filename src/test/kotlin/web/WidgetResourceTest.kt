@@ -3,8 +3,8 @@
 //import common.ServerTest
 //import io.restassured.RestAssured.*
 //import io.restassured.http.ContentType
-//import model.NewWidget
-//import model.Widget
+//import acheng1314.cn.NewWidget
+//import acheng1314.cn.Widget
 //import org.assertj.core.api.Assertions.assertThat
 //import org.junit.jupiter.api.Nested
 //import org.junit.jupiter.api.Test
