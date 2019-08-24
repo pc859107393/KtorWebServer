@@ -1,2 +1,3 @@
-rootProject.name = 'ktor-web-server'
-
+//rootProject.name = 'ktor-web-server'
+include ':web'
+include ':common'

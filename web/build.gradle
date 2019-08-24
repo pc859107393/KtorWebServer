@@ -1,0 +1,56 @@
+buildscript {
+    ext.shadow_version = '2.0.4'
+
+    repositories {
+//        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        //jar
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadow_version"
+
+    }
+}
+
+apply plugin: 'war'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'acheng1314.cn'
+version '1.0-SNAPSHOT'
+
+
+mainClassName = 'io.ktor.server.netty.EngineMain'
+shadowJar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+dependencies {
+
+    compile "io.ktor:ktor-server-netty:$ktor_version"
+    compile "io.ktor:ktor-jackson:$ktor_version"
+    compile "io.ktor:ktor-websockets:$ktor_version"
+
+    compile "org.jetbrains.exposed:exposed:$exposed_version"
+    compile 'com.zaxxer:HikariCP:3.3.1'
+    compile 'org.valiktor:valiktor-core:0.4.0'
+    runtime "mysql:mysql-connector-java:8.0.15"
+
+    compile "ch.qos.logback:logback-classic:1.2.3"
+    compile "net.logstash.logback:logstash-logback-encoder:5.1"
+    compile "org.apache.commons:commons-lang3:3.9"
+
+    compile "io.ktor:ktor-locations:$ktor_version"
+
+    compile 'org.redisson:redisson:3.11.1'
+
+    compile 'org.ehcache:ehcache:3.6.3'
+    compile "com.alibaba:fastjson:1.2.58"
+
+    testCompile "org.assertj:assertj-core:3.11.1"
+    testCompile "io.rest-assured:rest-assured:3.2.0"
+    testCompile "org.junit.jupiter:junit-jupiter-api:5.3.2"
+}
+
+

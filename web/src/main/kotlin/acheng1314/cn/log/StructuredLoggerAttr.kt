@@ -1,4 +1,5 @@
 package acheng1314.cn.log
+
 import io.ktor.application.ApplicationCall
 import io.ktor.application.application
 import io.ktor.application.call

@@ -50,7 +50,7 @@ fun Application.main() {
 
     install(ContentNegotiation) {
         jackson {
-            configure(SerializationFeature.INDENT_OUTPUT, true)
+            configure(SerializationFeature.INDENT_OUTPUT, false)
         }
     }
 
