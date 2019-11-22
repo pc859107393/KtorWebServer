@@ -6,7 +6,7 @@ import java.io.Serializable
 /**
  * 菜单表
  */
-object AdminMenu : IntIdTable("admin_menu") {
+object AdminMenu : IntIdTable("sys_admin_menu") {
     //菜单名称
     val name = varchar("name", 50)
     //请求uri

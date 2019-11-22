@@ -6,7 +6,7 @@ import java.io.Serializable
 /**
  * 用户表
  */
-object AdminUser : Table("admin_user") {
+object AdminUser : Table("sys_admin_user") {
     val id = integer("id").primaryKey().autoIncrement()
     val name = varchar("name", 50)
     val loginName = varchar("login_name", 25)
