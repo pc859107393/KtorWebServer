@@ -25,9 +25,16 @@
 hs_err_pid*
 /.gradle/
 /out/
-/build/
+**/build/**
 /.idea/
 .DS_Store
 ._.DS_Store
 /.vscode
 /~
+/logs/
+/log/
+**/classes/**
+**/.classpath
+**/.factorypath
+**/.project
+**/*.prefs
