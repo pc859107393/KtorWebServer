@@ -29,3 +29,5 @@ hs_err_pid*
 /.idea/
 .DS_Store
 ._.DS_Store
+/.vscode
+/~
