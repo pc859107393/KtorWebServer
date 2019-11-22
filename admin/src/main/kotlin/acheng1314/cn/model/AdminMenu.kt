@@ -52,4 +52,4 @@ data class NewAdminMenu(
         val icon: String,
         val createDate: Long,
         val updateDate: Long
-)
+) :Serializable
