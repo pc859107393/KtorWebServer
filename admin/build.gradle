@@ -28,6 +28,8 @@ shadowJar {
 
 dependencies {
 
+    compile project(":common")
+
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-jackson:$ktor_version"
     compile "io.ktor:ktor-websockets:$ktor_version"
@@ -37,8 +39,6 @@ dependencies {
     compile 'org.valiktor:valiktor-core:0.4.0'
     runtime "mysql:mysql-connector-java:8.0.15"
 
-    compile "ch.qos.logback:logback-classic:1.2.3"
-    compile "net.logstash.logback:logstash-logback-encoder:5.1"
     compile "org.apache.commons:commons-lang3:3.9"
 
     compile "io.ktor:ktor-locations:$ktor_version"
@@ -46,7 +46,6 @@ dependencies {
     compile 'org.redisson:redisson:3.11.1'
 
     compile 'org.ehcache:ehcache:3.6.3'
-    compile "com.alibaba:fastjson:1.2.58"
 
     testCompile "org.assertj:assertj-core:3.11.1"
     testCompile "io.rest-assured:rest-assured:3.2.0"

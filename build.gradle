@@ -58,6 +58,9 @@ subprojects {
         compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
         implementation fileTree(dir: 'libs', include: ['*.jar'])
+        compile "ch.qos.logback:logback-classic:1.2.3"
+        compile "net.logstash.logback:logstash-logback-encoder:5.1"
+        compile "com.alibaba:fastjson:1.2.58"
     }
 
 }
