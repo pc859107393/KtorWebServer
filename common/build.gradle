@@ -3,4 +3,6 @@ version '1.0-SNAPSHOT'
 
 dependencies {
 
+    compile 'org.redisson:redisson:3.11.1'
+
 }

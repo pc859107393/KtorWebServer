@@ -28,21 +28,14 @@ shadowJar {
 
 dependencies {
 
-    compile project(":common")
+    compile project(":service")
 
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-websockets:$ktor_version"
 
-    compile "org.jetbrains.exposed:exposed:$exposed_version"
     compile 'com.zaxxer:HikariCP:3.3.1'
     compile 'org.valiktor:valiktor-core:0.4.0'
     runtime "mysql:mysql-connector-java:8.0.15"
-
-    compile "io.ktor:ktor-locations:$ktor_version"
-
-    compile 'org.redisson:redisson:3.11.1'
-
-    compile 'org.ehcache:ehcache:3.6.3'
 
     testCompile "org.assertj:assertj-core:3.11.1"
     testCompile "io.rest-assured:rest-assured:3.2.0"

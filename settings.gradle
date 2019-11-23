@@ -1,3 +1,4 @@
 //rootProject.name = 'ktor-web-server'
 include ':admin'
 include ':common'
+include ':service'

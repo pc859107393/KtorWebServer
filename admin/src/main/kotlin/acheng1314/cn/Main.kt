@@ -9,7 +9,6 @@ import acheng1314.cn.redis.RedissionFactory
 import acheng1314.cn.response.respondJson
 import acheng1314.cn.web.admin
 import acheng1314.cn.web.redis
-import acheng1314.cn.web.widget
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
 import io.ktor.features.*
@@ -96,7 +95,6 @@ fun Application.main() {
     RedissionFactory.getInstance(config)
 
     install(Routing) {
-        widget()
         admin()
         redis()
 

@@ -31,7 +31,7 @@ token:c76897c0ae348756495ee9d202ef4707
 
 //获取菜单权限列表
 GET http://{{host}}:{{port}}/admin/menus
-token:7b70ace5b91cd53454fdbaec313bd474
+token:d0896f7daea3d206f25692471767caee
 
 ###
 

@@ -1,26 +1,29 @@
 package acheng1314.cn.web
 
+import acheng1314.cn.cache.AdminUserCacheExtend
+import acheng1314.cn.data.UserLoginDTO
+import acheng1314.cn.response.respondJson
+import acheng1314.cn.service.AdminMenuService
+import acheng1314.cn.service.AdminUserService
+import acheng1314.cn.utils.ValidateUtil
 import com.alibaba.fastjson.JSONObject
-import acheng1314.cn.data.UserLogin
 import io.ktor.application.call
 import io.ktor.http.Parameters
 import io.ktor.request.receive
-import acheng1314.cn.response.respondJson
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
 import org.valiktor.functions.isNotBlank
 import org.valiktor.validate
-import acheng1314.cn.service.AdminMenuService
-import acheng1314.cn.service.AdminUserService
-import acheng1314.cn.utils.ValidateUtil
 
 fun Route.admin() {
 
     val adminUserService = AdminUserService()
 
     val adminMenuService = AdminMenuService()
+
+    val adminUserCache = AdminUserCacheExtend()
 
     val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
@@ -29,7 +32,7 @@ fun Route.admin() {
         get("/") {
 
             val adminUserDTO = ValidateUtil.validateAdmin(call.request).also { it.password = "" }
-            val menus = adminMenuService.getMenusFromCache(adminUserDTO)
+            val menus = adminUserCache.getMenusFromCache(adminUserDTO)
             //父菜单
             val parent = menus.filter { dto -> dto.parentId == 0 }.sortedBy { dto -> dto.sort }
 
@@ -62,7 +65,7 @@ fun Route.admin() {
          */
         get("/menus") {
             val adminUserDTO = ValidateUtil.validateAdmin(call.request)
-            val menus = adminMenuService.getMenusFromCache(adminUserDTO)
+            val menus = adminUserCache.getMenusFromCache(adminUserDTO)
             //父菜单
             val parent = menus.filter { dto -> dto.parentId == 0 }.sortedBy { dto -> dto.sort }
 
@@ -95,10 +98,10 @@ fun Route.admin() {
          * jsonPost接口,密码16位小写
          */
         post(path = "/login") {
-            val userLogin = call.receive(UserLogin::class)
+            val userLogin = call.receive(UserLoginDTO::class)
             validate(userLogin, block = {
-                validate(UserLogin::userName).isNotBlank()
-                validate(UserLogin::pwd).isNotBlank()
+                validate(UserLoginDTO::userName).isNotBlank()
+                validate(UserLoginDTO::pwd).isNotBlank()
             })
             call.respondJson(adminUserService.login(userLogin), "登录成功！")
         }
@@ -108,9 +111,9 @@ fun Route.admin() {
          */
         post(path = "/loginDef") {
             val parameters = call.receive<Parameters>()
-            val userLogin = UserLogin(parameters[UserLogin::userName.name]
+            val userLogin = UserLoginDTO(parameters[UserLoginDTO::userName.name]
                     ?: throw java.lang.Exception("用户账户不能为空！")
-                    , parameters[UserLogin::pwd.name] ?: throw java.lang.Exception("用户密码不能为空！"))
+                    , parameters[UserLoginDTO::pwd.name] ?: throw java.lang.Exception("用户密码不能为空！"))
             call.respondJson(userLogin)
         }
 

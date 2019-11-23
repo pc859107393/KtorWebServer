@@ -1,13 +1,13 @@
 package acheng1314.cn.utils
 
+import acheng1314.cn.cache.AdminUserCacheExtend
 import acheng1314.cn.cache.Cache
+import acheng1314.cn.data.AdminUserDTO
 import acheng1314.cn.exception.UnauthorizedException
-import acheng1314.cn.model.AdminUserDTO
 import io.ktor.request.ApplicationRequest
 import io.ktor.request.uri
 import org.apache.commons.lang3.ObjectUtils
 import org.apache.commons.lang3.StringUtils
-import acheng1314.cn.service.AdminMenuService
 
 object ValidateUtil {
 
@@ -25,7 +25,7 @@ object ValidateUtil {
                     if (ObjectUtils.isEmpty(it)) throw throw UnauthorizedException("管理员未登录！")
                     //需要权限检察
                     if (validateAuth) {
-                        val menus = AdminMenuService().getMenusFromCache(it)
+                        val menus = AdminUserCacheExtend().getMenusFromCache(it)
 
                         assert(menus.run {
                             isEmpty() || none { dto ->
