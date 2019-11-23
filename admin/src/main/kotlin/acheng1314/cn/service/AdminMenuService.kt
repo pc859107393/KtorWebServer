@@ -8,7 +8,7 @@ import acheng1314.cn.model.AdminUserDTO
 import org.apache.commons.lang3.StringUtils
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
-import acheng1314.cn.utils.JSONUtil
+import acheng1314.cn.util.JSONUtil
 
 /**
  * 管理员菜单

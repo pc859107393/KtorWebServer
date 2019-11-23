@@ -1,14 +1,13 @@
 package acheng1314.cn.util.okhttp.model
 
-import java.io.IOException
-
 import okhttp3.Interceptor
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.Response
 import okio.BufferedSink
 import okio.GzipSink
-import okio.buffer
+import okio.Okio
+import java.io.IOException
 
 /**
  * okhttp的gzip压缩支持
@@ -18,13 +17,13 @@ class GzipRequestInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        if (originalRequest.body == null || originalRequest.header("Content-Encoding") != null) {
+        if (originalRequest.body() == null || originalRequest.header("Content-Encoding") != null) {
             return chain.proceed(originalRequest)
         }
 
         val compressedRequest = originalRequest.newBuilder()
                 .header("Content-Encoding", "gzip")
-                .method(originalRequest.method, gzip(originalRequest.body))
+                .method(originalRequest.method(), gzip(originalRequest.body()))
                 .build()
         return chain.proceed(compressedRequest)
     }
@@ -41,9 +40,10 @@ class GzipRequestInterceptor : Interceptor {
 
             @Throws(IOException::class)
             override fun writeTo(sink: BufferedSink) {
-                val gzipSink = GzipSink(sink).buffer()
-                body!!.writeTo(gzipSink)
-                gzipSink.close()
+                val buffer = Okio.buffer(GzipSink(sink))
+                body!!.writeTo(buffer)
+                buffer.flush()
+                buffer.close()
             }
         }
     }

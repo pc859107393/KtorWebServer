@@ -3,7 +3,6 @@ package acheng1314.cn.util.okhttp.wrapper
 
 import acheng1314.cn.util.okhttp.model.HttpParam
 import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -36,9 +35,9 @@ class PostRequestWrapper
         var body: RequestBody? = null
         if (!params.isHasFile) {
             body = if (!params.isJson) {
-                RequestBody.create("application/x-www-form-urlencoded".toMediaTypeOrNull(), params.params.toString())
+                RequestBody.create(MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"), params.params.toString())
             } else {
-                RequestBody.create("application/json".toMediaTypeOrNull(), params.jsonBody!!)
+                RequestBody.create(MediaType.parse("application/json; charset=utf-8"), params.jsonBody!!)
             }
         } else {
             val builder = MultipartBody.Builder()
@@ -53,7 +52,7 @@ class PostRequestWrapper
 
             body = builder.build()
         }
-        return body
+        return body!!
     }
 
 }

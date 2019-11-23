@@ -1,19 +1,18 @@
 package acheng1314.cn.util.okhttp
 
+import acheng1314.cn.util.okhttp.enums.HttpMethod
 import acheng1314.cn.util.okhttp.model.GzipRequestInterceptor
 import acheng1314.cn.util.okhttp.model.HttpParam
 import acheng1314.cn.util.okhttp.utils.LogInterceptor
 import acheng1314.cn.util.okhttp.utils.RequestFactory
 import acheng1314.cn.util.okhttp.utils.SSLUtil
 import acheng1314.cn.util.okhttp.utils.TextUtil
-import acheng1314.cn.util.okhttp.enums.HttpMethod
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-
 import java.io.File
 import java.io.IOException
-import java.util.SortedMap
+import java.util.*
 
 /**
  * okHttp的工具类，建造者模式，枚举<br></br>
@@ -192,8 +191,8 @@ class OkUtil private constructor(private val url: String) {
                         .newCall(request!!)
                         .execute()
             }
-            if (null != response.body) {
-                return response.body!!.string()
+            if (null != response!!.body()) {
+                return response.body()?.string()
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -219,4 +218,26 @@ class OkUtil private constructor(private val url: String) {
         }
     }
 
+}
+
+fun main(args: Array<String>) {
+    var execute = OkUtil.instance("http://localhost:8181/admin/login")
+            .method(HttpMethod.POST)
+            .params("userName", "pc859107393")
+            .params("pwd", "9945685a392931fc746b0c5023427481")
+            .jsonPost()
+            .execute()
+    println(execute)
+
+    execute = OkUtil.instance("https://www.acheng1314.cn/api/v1/findPostsByKey/1")
+            .method(HttpMethod.POST)
+            .params("pageNum", 1)
+            .params("pageSize", 10)
+            .execute()
+    println(execute)
+
+    execute = OkUtil.instance("https://www.acheng1314.cn/api/v1/findPostsByKey/1?pageNum=1&pageSize=10")
+            .method(HttpMethod.GET)
+            .execute()
+    println(execute)
 }

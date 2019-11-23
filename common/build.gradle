@@ -2,7 +2,5 @@ group 'acheng1314.cn'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
-    compile("com.squareup.okhttp3:okhttp:4.2.2")
 
 }

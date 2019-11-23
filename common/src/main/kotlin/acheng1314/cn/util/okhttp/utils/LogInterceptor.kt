@@ -25,24 +25,24 @@ class LogInterceptor : Interceptor {
         val response = chain.proceed(chain.request())
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
-        val mediaType = response.body!!.contentType()
-        val content = response.body!!.string()
+        val mediaType = response.body()?.contentType()
+        val content = response.body()?.string()!!
         try {
             builder.append(String.format("request--->content:%s\n", request.toString()))
-            builder.append(String.format("request--->headers:%s\n", request.headers.toString()))
-            if (null != request.body && null != request.body!!.contentType()) {
-                builder.append(String.format("request--->contentType:%s\n", request.body!!.contentType()!!.toString()))
+            builder.append(String.format("request--->headers:%s\n", request.headers().toString()))
+            if (null != request.body() && null != request.body()?.contentType()) {
+                builder.append(String.format("request--->contentType:%s\n", request.body()?.contentType()!!.toString()))
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        val method = request.method
+        val method = request.method()
         if ("POST" == method) {
-            if (null != request.body) {
-                val requestBody = request.body
+            if (null != request.body()) {
+                val requestBody = request.body()
                 if (null != requestBody) {
-                    var body: String? = null
+                    val body: String?
                     val buffer = Buffer()
                     requestBody.writeTo(buffer)
                     var charset: Charset? = UTF8
