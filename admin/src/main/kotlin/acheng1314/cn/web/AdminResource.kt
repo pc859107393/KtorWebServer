@@ -34,7 +34,7 @@ fun Route.admin() {
             val adminUserDTO = ValidateUtil.validateAdmin(call.request).also { it.password = "" }
             val menus = adminUserCache.getMenusFromCache(adminUserDTO)
             //父菜单
-            val parent = menus.filter { dto -> dto.parentId == 0 }.sortedBy { dto -> dto.sort }
+            val parent = menus.filter { dto -> dto.parentId == 0L }.sortedBy { dto -> dto.sort }
 
             val result = mutableListOf<Any>()
 
@@ -67,7 +67,7 @@ fun Route.admin() {
             val adminUserDTO = ValidateUtil.validateAdmin(call.request)
             val menus = adminUserCache.getMenusFromCache(adminUserDTO)
             //父菜单
-            val parent = menus.filter { dto -> dto.parentId == 0 }.sortedBy { dto -> dto.sort }
+            val parent = menus.filter { dto -> dto.parentId == 0L }.sortedBy { dto -> dto.sort }
 
             val result = mutableListOf<Any>()
 

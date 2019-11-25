@@ -6,8 +6,8 @@ import java.io.Serializable
  * 菜单包装
  */
 data class AdminMenuDTO(
-        val id: Int,
-        val parentId: Int,
+        val id: Long,
+        val parentId: Long,
         val sort: Int,
         val name: String,
         val uri: String,

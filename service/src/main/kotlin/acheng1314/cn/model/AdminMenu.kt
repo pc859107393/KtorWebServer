@@ -1,12 +1,12 @@
 package acheng1314.cn.model
 
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.LongIdTable
 import java.io.Serializable
 
 /**
  * 菜单表
  */
-object AdminMenu : IntIdTable("sys_admin_menu") {
+object AdminMenu : LongIdTable("sys_admin_menu") {
     //菜单名称
     val name = varchar("name", 50)
     //请求uri
@@ -30,7 +30,7 @@ object AdminMenu : IntIdTable("sys_admin_menu") {
  * 新增用户菜单
  */
 data class NewAdminMenu(
-        val id: Int?,
+        val id: Long?,
         val parentId: Int,
         val sort: Int,
         val name: String,
@@ -38,4 +38,4 @@ data class NewAdminMenu(
         val icon: String,
         val createDate: Long,
         val updateDate: Long
-) :Serializable
+) : Serializable

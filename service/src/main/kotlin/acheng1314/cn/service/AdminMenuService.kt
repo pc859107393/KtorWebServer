@@ -31,7 +31,7 @@ class AdminMenuService {
 
     private fun toAdminMenu(row: ResultRow) = AdminMenuDTO(
             id = row[AdminMenu.id].value,
-            parentId = row[AdminMenu.parentId],
+            parentId = row[AdminMenu.parentId].toLong(),
             sort = row[AdminMenu.sort],
             icon = if (StringUtils.isBlank(row[AdminMenu.icon])) "" else row[AdminMenu.icon]!!,
             name = row[AdminMenu.name],

@@ -43,7 +43,7 @@ object Cache {
             .build()
 
     private val adminMenuCacheConfiguration = CacheConfigurationBuilder
-            .newCacheConfigurationBuilder<Int, AdminMenuDTO>(Int::class.javaObjectType, AdminMenuDTO::class.java
+            .newCacheConfigurationBuilder(Long::class.javaObjectType, AdminMenuDTO::class.java
                     , ResourcePoolsBuilder.newResourcePoolsBuilder()
                     .heap(10, MemoryUnit.KB)    //堆缓存空间
                     .offheap(20, MemoryUnit.MB) //堆外缓存空间
@@ -66,5 +66,5 @@ object Cache {
 
     val adminIdCache = cacheManager.createCache<Int, AdminUserDTO>("adminUsers", adminUserCacheConfiguration)
 
-    val adminMenuIdCache = cacheManager.createCache<Int, AdminMenuDTO>("adminMenus", adminMenuCacheConfiguration)
+    val adminMenuIdCache = cacheManager.createCache<Long, AdminMenuDTO>("adminMenus", adminMenuCacheConfiguration)
 }
