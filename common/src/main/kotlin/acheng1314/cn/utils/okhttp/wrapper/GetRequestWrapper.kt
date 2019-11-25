@@ -14,17 +14,17 @@ class GetRequestWrapper(url: String, private val params: HttpParam) : RequestWra
     private val url: String
 
     init {
-        var url = url
+        var aimUrl = url
         val urlParams = params.params
-        if (!TextUtil.isEmpty(url) && !TextUtil.isEmpty(urlParams.toString())) {
-            url = if (url.contains("?")) {
-                "$url&$urlParams"
+        if (!TextUtil.isEmpty(aimUrl) && !TextUtil.isEmpty(urlParams.toString())) {
+            aimUrl = if (aimUrl.contains("?")) {
+                "$aimUrl&$urlParams"
             } else {
-                "$url?$urlParams"
+                "$aimUrl?$urlParams"
             }
         }
 
-        this.url = url
+        this.url = aimUrl
     }
 
     override fun create(): Request {

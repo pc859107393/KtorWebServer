@@ -44,7 +44,7 @@ subprojects {
     }
 
     repositories {
-        mavenCentral()
+//        mavenCentral()
         maven { url = "https://maven.aliyun.com/repository/public" }
         maven { url = "https://dl.bintray.com/kotlin/exposed" }
     }

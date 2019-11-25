@@ -8,11 +8,11 @@ package acheng1314.cn.utils.okhttp.model
  */
 class HttpParamsEntry(var k: String?, var v: Any) : Comparable<HttpParamsEntry> {
 
-    override fun equals(o: Any?): Boolean {
-        return if (o is HttpParamsEntry) {
-            k == o.k
+    override fun equals(other: Any?): Boolean {
+        return if (other is HttpParamsEntry) {
+            k == other.k
         } else {
-            super.equals(o)
+            super.equals(other)
         }
     }
 

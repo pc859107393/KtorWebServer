@@ -32,7 +32,7 @@ class PostRequestWrapper
     }
 
     private fun initBody(): RequestBody {
-        var body: RequestBody? = null
+        val body: RequestBody?
         if (!params.isHasFile) {
             body = if (!params.isJson) {
                 RequestBody.create(MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"), params.params.toString())

@@ -28,7 +28,7 @@ class RequestFactory
      * @return
      */
     fun initRequest(): Request? {
-        var wrapper: RequestWrapper? = null
+        val wrapper: RequestWrapper?
         when (method) {
             HttpMethod.GET -> {
                 wrapper = GetRequestWrapper(url, params)
