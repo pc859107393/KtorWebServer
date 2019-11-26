@@ -18,34 +18,34 @@ Content-Type: application/json
 
 //获取管理员信息
 GET http://{{host}}:{{port}}/admin
-token:24ba74709912317d53d6e27a99cc4165
+token:2fb63f2163c431f5218a1b2515d02cd0
 
 ###
 
 //获取管理员列表
-GET http://{{host}}:{{port}}/admin/page/1
-token:c76897c0ae348756495ee9d202ef4707
+GET http://{{host}}:{{port}}/admin/page/2
+token:2fb63f2163c431f5218a1b2515d02cd0
 
 ###
 
 
 //获取菜单权限列表
 GET http://{{host}}:{{port}}/admin/menus
-token:d0896f7daea3d206f25692471767caee
+token:2fb63f2163c431f5218a1b2515d02cd0
 
 ###
 
 
 //刷新菜单，权限验证
 GET http://{{host}}:{{port}}/admin/notifyMenu
-token:7b70ace5b91cd53454fdbaec313bd474
+token:2fb63f2163c431f5218a1b2515d02cd0
 
 ###
 
 
 //刷新菜单，权限验证
 GET http://{{host}}:{{port}}/admin/getAllFromCache
-token:7b70ace5b91cd53454fdbaec313bd474
+token:2fb63f2163c431f5218a1b2515d02cd0
 
 ###
 
