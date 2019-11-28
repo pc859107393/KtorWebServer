@@ -51,6 +51,7 @@ subprojects {
 
     task createDirs() {
         sourceSets*.kotlin.srcDirs*.each { it.mkdirs() }
+        sourceSets*.java.srcDirs*.each { delete it }
         sourceSets*.resources.srcDirs*.each { it.mkdirs() }
     }
 
