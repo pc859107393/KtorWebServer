@@ -24,7 +24,7 @@ class AdminUserCacheExtend {
         menuIds = try {
             JSONUtil.toArray(duty, Long::class.java)
         } catch (e: Exception) {
-            val rule = siteConfigService.getDefualtRuleByName(duty)
+            val rule = siteConfigService.getDefaultRuleByName(duty)
             logger.info("用户${admin.loginName}没有自定义权限，默认权限为：$duty")
             JSONUtil.toArray(rule, Long::class.java)
         }

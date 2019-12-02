@@ -44,10 +44,10 @@ class SiteConfigService {
      * 获取默认权限
      * @param name 默认权限名称
      */
-    suspend fun getDefualtRuleByName(name: String) = get(name)
+    suspend fun getDefaultRuleByName(name: String) = get(name)
 
     /**
      * 获取默认内置管理员权限组
      */
-    suspend fun getDefualtRule() = get("defRule")
+    suspend fun getDefaultRule() = get("defRule")
 }
