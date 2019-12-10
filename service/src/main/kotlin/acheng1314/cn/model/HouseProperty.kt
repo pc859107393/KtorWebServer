@@ -40,12 +40,12 @@ object HouseProperty : LongIdTable("t_house_property") {
     /**
      * 占地面积
      */
-    val floorArea = float("floor_area").nullable()
+    val floorArea = double("floor_area").nullable()
 
     /**
      * 建筑面积
      */
-    val coveredArea = float("covered_area").nullable()
+    val coveredArea = double("covered_area").nullable()
 
     /**
      * 容积率

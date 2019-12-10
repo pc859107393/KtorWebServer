@@ -120,7 +120,7 @@ class AdminUserService {
     suspend fun login(userDTO: UserLoginDTO): String {
         val query = dbQuery {
             AdminUser.select { AdminUser.loginName eq userDTO.userName }
-                    .mapNotNull { toAdminUser(it) }
+                    .map { toAdminUser(it) }
                     .singleOrNull()
         }
 

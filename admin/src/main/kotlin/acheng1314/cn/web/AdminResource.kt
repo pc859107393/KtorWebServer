@@ -2,6 +2,7 @@ package acheng1314.cn.web
 
 import acheng1314.cn.cache.AdminUserCacheExtend
 import acheng1314.cn.data.UserLoginDTO
+import acheng1314.cn.model.NewAdminUser
 import acheng1314.cn.response.respondJson
 import acheng1314.cn.service.AdminMenuService
 import acheng1314.cn.service.AdminUserService
@@ -10,10 +11,7 @@ import com.alibaba.fastjson.JSONObject
 import io.ktor.application.call
 import io.ktor.http.Parameters
 import io.ktor.request.receive
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.routing.*
 import org.valiktor.functions.isNotBlank
 import org.valiktor.validate
 
@@ -138,6 +136,11 @@ fun Route.admin() {
         get("/notifyMenu") {
             ValidateUtil.validateAdmin(call.request, true)
             call.respondJson(adminMenuService.notifyMenu())
+        }
+
+        put("/add") {
+            val adminUser = call.receive(NewAdminUser::class)
+            adminUserService.addAdmin(adminUser)
         }
     }
 }

@@ -49,3 +49,13 @@ token:2fb63f2163c431f5218a1b2515d02cd0
 
 ###
 
+//刷新菜单，权限验证
+POST http://{{host}}:{{port}}/redis/testJson
+Content-Type: application/json
+
+{
+  "userName": "pc859107393",
+  "pwd": "9945685a392931fc746b0c5023427481"
+}
+###
+
