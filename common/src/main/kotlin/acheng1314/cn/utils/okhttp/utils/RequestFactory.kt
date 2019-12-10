@@ -28,20 +28,19 @@ class RequestFactory
      * @return
      */
     fun initRequest(): Request? {
-        val wrapper: RequestWrapper?
-        when (method) {
+        val wrapper: RequestWrapper? = when (method) {
             HttpMethod.GET -> {
-                wrapper = GetRequestWrapper(url, params)
+                GetRequestWrapper(url, params)
             }
             HttpMethod.POST -> {
-                wrapper = PostRequestWrapper(url, params)
+                PostRequestWrapper(url, params)
             }
             else -> {
                 //                throw new RuntimeException("暂未实现该方法");
                 return null
             }
         }
-        return wrapper.create()
+        return wrapper?.create()
     }
 
 }
